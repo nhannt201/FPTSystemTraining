@@ -1,0 +1,130 @@
+﻿@model TestSession.Models.AddTo
+@{
+    ViewBag.Title = "Add More";
+}
+<div class="jumbotron">
+    <h1>Manage Course - Add To</h1>
+</div>
+<div class="row col-12">
+    @if (Request.QueryString["az"] == "0")
+    {
+        <div class="alert alert-success mt-3" role="alert">
+            Added Course to Category!
+        </div>
+    }
+    @if (Request.QueryString["az"] == "2")
+    {
+        <div class="alert alert-success mt-3" role="alert">
+            Added Topic to Course!
+        </div>
+    }
+    @if (Request.QueryString["az"] == "1")
+    {
+        <div class="alert alert-warning mt-3" role="alert">
+            No Category or Course to add!
+        </div>
+    }
+    @if (Request.QueryString["az"] == "3")
+    {
+        <div class="alert alert-warning mt-3" role="alert">
+            No Topic or Course to add!
+        </div>
+    }
+    @using (Html.BeginForm("CourseToCate", "Course", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+    {
+        <h3>Add Course To Category</h3>
+        <div class="form-group">
+            <div class="form-group">
+                <label for="type">Add Course</label>
+                <select class="form-control" id="couID" name="couID">
+                    @if (Model.courseDB == null || Model.courseDB.Count() == 0)
+                    {
+                        <option value="0">No Course</option>
+                    }
+                    else
+                    {
+                        foreach (var x in Model.courseDB)
+                        {
+                            <option value="@x.couID">@x.name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+            <label for="type">To Category</label>
+            <select class="form-control" id="cateID" name="cateID">
+                @if (Model.cateDB == null || Model.cateDB.Count() == 0)
+                {
+                    <option value="0">No Category</option>
+                }
+                else
+                {
+                    foreach (var x in Model.cateDB)
+                    {
+                        <option value="@x.cateID">@x.name</option>
+                    }
+                }
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Add" class="btn btn-primary float-right" />
+        </div>
+        <div class="form-group">
+            @Html.ActionLink("New Course", "CreateCourse", new { @type = "0" }, new { @class = "btn btn-secondary float-left mr-3" })
+        </div>
+        <div class="form-group">
+            @Html.ActionLink("New Category", "CreateCourse", new { @type = "1" }, new { @class = "btn btn-secondary float-left mr-3" })
+        </div>
+
+    }
+
+
+    @using (Html.BeginForm("TopicToCourse", "Course", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+    {
+        <h3>Add Topic To Course</h3>
+        <div class="form-group">
+            <label for="type">Add Topic</label>
+            <select class="form-control" id="topID" name="topID">
+                @if (Model.topicDB == null || Model.topicDB.Count() == 0)
+                {
+                    <option value="0">No Topic</option>
+                }
+                else
+                {
+                    foreach (var x in Model.topicDB)
+                    {
+                        <option value="@x.topID">@x.name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="type">To Course</label>
+            <select class="form-control" id="couID" name="couID">
+                @if (Model.courseDB == null || Model.courseDB.Count() == 0)
+                {
+                    <option value="0">No Course</option>
+                }
+                else
+                {
+                    foreach (var x in Model.courseDB)
+                    {
+                        <option value="@x.couID">@x.name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Add" class="btn btn-primary float-right" />
+        </div>
+        <div class="form-group">
+            @Html.ActionLink("New Topic", "CreateCourse", new { @type = "2" }, new { @class = "btn btn-secondary float-left mr-3" })
+        </div>
+        <div class="form-group">
+            @Html.ActionLink("New Course", "CreateCourse", new { @type = "0" }, new { @class = "btn btn-secondary float-left mr-3" })
+        </div>
+    }
+
+</div>

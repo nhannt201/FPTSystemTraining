@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - FPT Training Center</title>
+    @Styles.Render("~/Content/bootstrap.css")
+    @Styles.Render("~/Content/bootstrap.theme.css")
+    @Styles.Render("~/Content/Site.css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+        <div class="container">
+            @Html.ActionLink("FPT Training Center", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" >
+                <ul class="navbar-nav me-auto">
+                    @if (Session["userInfo"] != null)
+                    {
+
+                        if (Session["userPermit"] != null)
+                        {
+                            switch (Session["userPermit"])
+                            {
+                                case "admin":
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Manage Account", "ManageAccount", "Account", null, new { @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Create Account", "NewAccount", "Account", null, new { @class = "nav-link" })
+                                    </li>
+                                    break;
+                                case "trainer":
+                                    <li class="nav-item">
+                                        @Html.ActionLink("My Course", "TrainerCourseView", "Course", null, new { @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item">
+                                        @Html.ActionLink("My Account", "MyAccount", "Account", null, new { @class = "nav-link" })
+                                    </li>
+                                    break;
+                                case "staff":
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Manage Trainee", "ManageTrainee", "Account", null, new { @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Manage Trainer", "ManageTrainer", "Account", null, new { @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Manage Course", "ManageCourse", "Course", null, new { @class = "nav-link" })
+                                    </li>
+                                    break;
+                                case "trainee":
+                                    break;
+                            }
+                        }
+                    }
+                </ul>@{
+                    TestSession.Models.AccountDB _uobj = Session["userInfo"] as TestSession.Models.AccountDB;
+                    if (_uobj != null)
+                    {
+                                <ul class="navbar-nav ms-md-auto">
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Hello, " + _uobj.username, "MyAccount", "Account", null, new { @class = "nav-link" })
+                                    </li>
+                                    <li class="nav-item">
+                                        @Html.ActionLink("Logout", "Logout", "Account", new { zero = 0}, new { @class = "nav-link" })
+                                    </li>
+                                </ul>
+                    }
+                }
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - FPT Training Center</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

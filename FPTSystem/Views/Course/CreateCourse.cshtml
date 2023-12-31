@@ -1,0 +1,73 @@
+﻿@model TestSession.Models.NewCourse
+@{
+    ViewBag.Title = "Create Course";
+}
+
+<div class="jumbotron">
+    <h1>Manage Course - Add new data</h1>
+</div>
+<div class="container">
+    <div class="row">
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success mt-3" role="alert">
+
+                @ViewBag.Success
+            </div>
+        }
+        @if (ViewBag.Status != null)
+        {
+            <div class="alert alert-warning mt-3" role="alert">
+
+                @ViewBag.Status
+            </div>
+        }
+        @using (Html.BeginForm("CreateCourse", "Course", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+        {
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select class="form-control" id="type" name="type">
+                    @if (Request.QueryString["type"] == "0") //cai nay de nhan dang loai tao, id num ko quan trong
+                    {
+                        <option value="0">Topic</option>
+                        <option value="1">Category</option>
+                        <option value="2" selected>Course</option>
+                    }
+                    else if (Request.QueryString["type"] == "1") //cai nay de nhan dang loai tao, id num ko quan trong
+                    {
+                        <option value="0">Topic</option>
+                        <option value="1" selected>Category</option>
+                        <option value="2">Course</option>
+                    }
+                    else if (Request.QueryString["type"] == "2") //cai nay de nhan dang loai tao, id num ko quan trong
+                    {
+                        <option value="0" selected>Topic</option>
+                        <option value="1">Category</option>
+                        <option value="2">Course</option>
+                    }
+                    else
+                    {
+                        <option value="0">Topic</option>
+                        <option value="1">Category</option>
+                        <option value="2">Course</option>
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Name:</label>
+
+                    @Html.TextBoxFor(m => m.name, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.name), @required = "true", @minlength = "1", @maxlength = "200", @value = Request.QueryString["suggest"] })
+
+              
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                @Html.TextAreaFor(m => m.description, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.description), @row = "3", @maxlength = "500" })
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-lg btn-primary float-right" value="Add" />
+            </div>
+        }
+    </div>
+</div>

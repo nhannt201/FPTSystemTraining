@@ -1,0 +1,140 @@
+﻿@model List<TestSession.Models.SearchModel>
+@{
+    ViewBag.Title = "Search Account Staff";
+}
+<div class="jumbotron">
+    <h1>Manage Account - Search Account</h1>
+</div>
+<div class="container">
+    <div class="row">
+
+        @using (Html.BeginForm("SearchTrain", "Account", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+        {
+            <div class="form-group">
+                <label>Search account:</label>
+                <input type="text" class="form-control" id="keyword" name="keyword" placeholder="Enter username or email address here, or empty search all" />
+                @*@Html.TextBoxFor(m => m.keyword, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.keyword) })*@
+            </div>
+            <div class="form-group">
+                <label>Type account:</label>
+                <select class="form-control" id="type_rs" name="type_rs">
+                    <option value="-1">--All--</option>
+                    <option value="0">Trainee</option>
+                    <option value="1">Trainer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary float-right" value="Search" />
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("New Trainee", "NewTrainee", null, new { @class = "btn btn-secondary float-left mr-3" })
+            </div>
+            @*<div class="form-group">
+                @Html.ActionLink("Trainer to Topic", "", null, new { @class = "btn btn-secondary float-left mr-3" })
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("Trainee to Course", "", null, new { @class = "btn btn-secondary float-left mr-3" })
+            </div>*@
+        }
+        @if (ViewBag.Status != null)
+        {
+            <div class="alert alert-warning mt-3 p-2" id="warnMsg" role="alert">
+
+                @ViewBag.Status
+            </div>
+
+            @Html.ActionLink("Create New Trainee Account", "NewTrainee", new { @suggest = ViewBag.KeyWordSeach }, new { @class = "btn btn-outline-dark d-grid gap-2 mt-3 p-3" })
+
+        }
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success mt-3 p-2" id="successMsg" role="alert">
+
+                @ViewBag.Success
+
+            </div>
+        }
+
+        @if (Model != null)
+        {
+            int u = 0;
+            <table class="table table-hover" id="tableResult">
+                <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Type acc</th>
+                        <th scope="col">Full name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model)
+                    {
+
+                        if (x.type_acc == 0 && x.type_rs == 0) //type_acc 0 la trainer con type_acc 1
+                        {
+                            <tr>
+                                <th scope="row">@x.username</th>
+                                <td>@((x.type_acc == 0) ? "Trainee" : "")</td>
+                                <td>@x.fullname</td>
+                                <td>@x.email</td>
+                                <td>
+                                    @Html.ActionLink("Edit Info & Course", "ManageTrainee", new { user = x.username }, new { @class = "btn btn-outline-secondary" })
+                                </td>
+                            </tr>
+                            u++;
+                        }
+                        else if (x.type_acc == 1 && x.type_rs == 1)
+                        {
+                            <tr>
+                                <th scope="row">@x.username</th>
+                                <td>@((x.type_acc == 1) ? "Trainer" : "")</td>
+                                <td>@x.fullname</td>
+                                <td>@x.email</td>
+                                <td>@Html.ActionLink("Edit Info & Course", "ManageTrainer", new { user = x.username }, new { @class = "btn btn-outline-secondary" })</td>
+                            </tr>
+                            u++;
+                        }
+
+                        else if (x.type_rs == -1 && (x.type_acc == 0 || x.type_acc == 1)) //co the giai thich la yeu cau -1 (all) se tra ve ca 0 va 1
+                        {
+                            <tr>
+                                <th scope="row">@x.username</th>
+                                <td>@((x.type_acc == 0) ? "Trainee" : (x.type_acc == 1) ? "Trainer" : "")</td>
+                                <td>@x.fullname</td>
+                                <td>@x.email</td>
+                                @if (x.type_acc == 0)
+                                {
+                                    <td>@Html.ActionLink("Edit Info & Course", "ManageTrainee", new { user = x.username }, new { @class = "btn btn-outline-secondary" })</td>
+                                }
+                                else
+                                {
+                                    <td>@Html.ActionLink("Edit Info & Course", "ManageTrainer", new { user = x.username }, new { @class = "btn btn-outline-secondary" })</td>
+                                }
+                            </tr>
+                            u++;
+                        }
+                    }
+                </tbody>
+            </table>
+            if (u == 0)
+            {
+
+                <script type="text/javascript">
+                    document.getElementById("successMsg").style.display = "none";
+                    document.getElementById("tableResult").style.display = "none";
+                    document.getElementById("warnMsg").innerHTML = "The account you requested does not exist!";
+                </script>
+
+            }
+            else
+            {
+                <script type="text/javascript">
+                    document.getElementById("successMsg").style.display = "block";
+                </script>
+            }
+        }
+
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿@model TestSession.Models.InfoDetailsDB
+@{
+    ViewBag.Title = "My Account";
+}
+
+<div class="jumbotron">
+    <h1>My Account</h1>
+</div>
+<div class="container">
+    <div class="row">
+        @if (Request.QueryString["u"] != null)
+        {
+            if (Request.QueryString["u"] == "1")
+            {
+                ViewBag.Success = "Password has been changed!!";
+            }
+            if (Request.QueryString["u"] == "0")
+            {
+                ViewBag.Success = "Information has been changed!!";
+            }
+            if (Request.QueryString["u"] == "2")
+            {
+                ViewBag.Status = "The two changed passwords do not match!";
+            }
+
+        }
+        @if (ViewBag.Status != null)
+        {
+            <div class="alert alert-warning mt-3 p-2" role="alert">
+
+                @ViewBag.Status
+            </div>
+        }
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success mt-3 p-2" role="alert">
+
+                @ViewBag.Success
+            </div>
+        }
+        <div class="col-6">
+
+            <h1>Account Information</h1>
+            @using (Html.BeginForm("UpdateInfo", "Account", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+            {
+
+                <fieldset>
+
+                    <div class="form-group">
+                        <label>Date of birth:</label>
+                        @Html.TextBoxFor(m => m.date_birthday, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.date_birthday), @value = @Model.date_birthday, onfocusin = "(this.type='date')", onfocusout = "(this.type='text')" })
+                    </div>
+                    <div class="form-group">
+                        <label>My work place:</label>
+                        @Html.TextBoxFor(m => m.workplace, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.workplace), @value = @Model.workplace })
+                    </div>
+                    <div class="form-group">
+                        <label>Full name:</label>
+                        @Html.TextBoxFor(m => m.fullname, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.fullname), @value = @Model.fullname })
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        @Html.TextBoxFor(m => m.email, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.email), @type = "email", @readonly = "true", @value = @Model.email })
+                    </div>
+                    <div class="form-group">
+                        <label>My job:</label>
+                        @Html.TextBoxFor(m => m.job, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.job), @value = @Model.job })
+                    </div>
+                    <div class="form-group">
+                        <label>My telephone:</label>
+                        @Html.TextBoxFor(m => m.telephone, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.telephone), @value = @Model.telephone, @type = "telephone" })
+                    </div>
+                    <div class="form-group">
+                        <label>My TOEIC score:</label>
+                        @Html.TextBoxFor(m => m.toeic_score, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.toeic_score), @value = @Model.toeic_score })
+                    </div>
+                    <div class="form-group">
+                        <label>External or Internal Type:</label>
+                        @Html.TextBoxFor(m => m.ex_or_in, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.ex_or_in), @value = @Model.ex_or_in })
+                    </div>
+                    <div class="form-group">
+                        <label>My location:</label>
+                        @Html.TextBoxFor(m => m.location, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.location), @value = @Model.location })
+                    </div>
+                    <div class="d-grid gap-2">
+                        <input type="submit" class="btn btn-lg btn-primary mt-3" value="Update" />
+                    </div>
+                </fieldset>
+            }
+        </div>
+        <div class="col-6">
+            <h1>Change password</h1>
+            @using (Html.BeginForm("ChangePassword", "Account", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+            {
+
+                <div class="form-group">
+                    <label>New Password:</label>
+                    <input type="password" name="password_change" id="password_change" class="form-control" placeholder="Enter password need to change" maxlength="200" required />
+                </div>
+                <div class="form-group">
+                    <label>Re-password:</label>
+                    <input type="password" name="password_change_re" id="password_change_re" class="form-control" placeholder="Enter re-password" maxlength="200" required />
+                </div>
+                <input type="submit" name="changePass" class="btn btn-primary mt-3" value="Change" />
+
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,122 @@
+﻿@model TestSession.Models.NewCourse
+@{
+    ViewBag.Title = "Manage Course";
+}
+
+<div class="jumbotron">
+    <h1>Manage Course - Edit data</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="alert alert-warning mt-3 p-2" role="alert" id="warnMsg" style="display: none;">
+        </div>
+        <div class="alert alert-success mt-3 p-2" role="alert" id="successMsg" style="display: none;">
+        </div>
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success mt-3" role="alert">
+
+                @ViewBag.Success
+            </div>
+        }
+        @if (ViewBag.Status != null)
+        {
+            <div class="alert alert-warning mt-3" role="alert">
+
+                @ViewBag.Status
+            </div>
+        }
+    <div id="editAccount">
+        @using (Html.BeginForm("ManageCourse", "Course", new { @typeid = Model.id} , FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+        {
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select class="form-control" id="type" name="type" readonly>
+                    @if (Model.type == 0) //cai nay de nhan dang loai tao, id num ko quan trong
+                    {
+                        @*<option value="0" >Topic</option>
+                        <option value="1">Category</option>*@
+                        <option value="2" selected>Course</option>
+                    }
+                    else if (Model.type == 1) //cai nay de nhan dang loai tao, id num ko quan trong
+                    {
+                        @*<option value="0">Topic</option>*@
+                        <option value="1" selected>Category</option>
+                        @*<option value="2">Course</option>*@
+                    }
+                    else if (Model.type == 2) //cai nay de nhan dang loai tao, id num ko quan trong
+                    {
+                        <option value="0" selected>Topic</option>
+                        @*<option value="1">Category</option>
+                        <option value="2" >Course</option>*@
+                    }
+                   
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Name:</label>
+
+                @Html.TextBoxFor(m => m.name, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.name), @required = "true", @minlength = "1", @maxlength = "200", @value = Model.name })
+
+
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                @Html.TextAreaFor(m => m.description, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.description), @row = "3", @maxlength = "500", @value = Model.description })
+            </div>
+            <div class="d-grid gap-2">
+                <input type="submit" class="btn btn-lg btn-primary mt-3" value="Update" />
+            </div>
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-lg btn-danger mt-3" data-toggle="modal" data-target="#exampleModal">
+                    Delete
+                </button>
+            </div>
+        }
+    </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                This data after deletion cannot be restored, are you sure you want to delete it?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="clickDeleteData(@Request.QueryString["id_type"],@Request.QueryString["type"]);">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function clickDeleteData(id, type) {
+        document.getElementById("warnMsg").innerHTML = "Deleting data...";
+        document.getElementById("warnMsg").style.display = "block";
+        document.getElementById("editAccount").style.display = "none";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("successMsg").style.display = "block";
+                document.getElementById("successMsg").innerHTML = 'Data has been deleted!<meta http-equiv="refresh" content="2; url=https://@Request.Url.Authority/Course/SearchCourse" />';
+            }
+        };
+        xhttp.open("GET", "https://@Request.Url.Authority/Course/DeleteCourse?id_del=" + id + "&type=" + type, true);
+        xhttp.send();
+    }
+
+
+</script>

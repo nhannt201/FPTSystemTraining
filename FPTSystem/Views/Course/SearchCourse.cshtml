@@ -1,0 +1,95 @@
+﻿@model TestSession.Models.SearchCourse 
+@{
+    ViewBag.Title = "Search Course";
+}
+
+<div class="jumbotron">
+    <h1>Manage Course - Search Course</h1>
+</div>
+<div class="container">
+    <div class="row">
+        @using (Html.BeginForm("SearchCourse", "Course", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+        {
+            <div class="form-group">
+                <label>Search Course (Categoty, Topic, Course Name)</label>
+                @Html.TextBoxFor(n => n.keyword, new { @class = "form-control", @placeholder = "Enter name or desc to search, or empty to search all", @maxlength = "200" })
+            </div>
+            <div class="form-group">
+                <label for="type_acc">Type search</label>
+                <select class="form-control" id="type_find" name="type_find">
+                    <option value="0">Course Name</option>
+                    <option value="1">Category</option>
+                    <option value="2">Topic</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary float-right" value="Search" />
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("Add A to B", "AddTo", null, new { @class = "btn btn-secondary float-left mr-3" })
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("New Course", "CreateCourse", null, new { @class = "btn btn-secondary float-left mr-3" })
+            </div>
+        }
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success mt-3" role="alert">
+
+                @ViewBag.Success
+            </div>
+        }
+        @if (ViewBag.Status != null)
+        {
+            <div class="alert alert-warning mt-3" role="alert">
+
+                @ViewBag.Status
+            </div>
+            if (Model.type_find == 0)
+            {
+                @Html.ActionLink("Create New Course", "CreateCourse", new { @suggest = Model.keyword, @type = Model.type_find }, new { @class = "btn btn-outline-dark d-grid gap-2 mt-3 p-3" })
+
+            }
+            if (Model.type_find == 1)
+            {
+                @Html.ActionLink("Create New Category", "CreateCourse", new { @suggest = Model.keyword, @type = Model.type_find }, new { @class = "btn btn-outline-dark d-grid gap-2 mt-3 p-3" })
+
+            }
+            if (Model.type_find == 2)
+            {
+                @Html.ActionLink("Create New Topic", "CreateCourse", new { @suggest = Model.keyword, @type = Model.type_find }, new { @class = "btn btn-outline-dark d-grid gap-2 mt-3 p-3" })
+
+            }
+
+        }
+        <!--Result-->
+        @if (Model.listrs != null)
+        {
+            int u = 1;
+            <table class="table table-hover" id="tableResult">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model.listrs)
+                    {
+                        <tr>
+                            <th scope="row">@u</th>
+                            <td>@x.name</td>
+                            <td>@x.desc</td>
+                            <td>@Html.ActionLink("Edit", "ManageCourse", new { id_type = x.id, type = x.type_find }, new { @class = "btn btn-outline-secondary" })</td>
+                        </tr>
+                        u++;
+
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+        </div>

@@ -1,0 +1,96 @@
+﻿@model TestSession.Models.EditAdminModel
+@{
+    ViewBag.Title = "Manage Trainer";
+}
+
+<div class="jumbotron">
+    <h1>Manage Trainer Account</h1>
+</div>
+<div class="container">
+    <div class="row col-12">
+        @if (ViewBag.Status != null)
+        {
+            <div class="alert alert-warning mt-3 p-2" role="alert">
+
+                @ViewBag.Status
+            </div>
+        }
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success mt-3 p-2" role="alert">
+
+                @ViewBag.Success
+            </div>
+        }
+        <div class="col-10" id="editAccount">
+
+            <h1>Account Information & Change Password</h1>
+            @using (Html.BeginForm("ManageTrainer", "Account", new { user = Request.QueryString["user"] }, FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+            {
+
+        <fieldset>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" value="@Request.QueryString["user"]" readonly class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Full name:</label>
+                @Html.TextBoxFor(m => m.fullname, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.fullname), @value = @Model.fullname })
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                @Html.TextBoxFor(m => m.email, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.email), @type = "email", @value = @Model.email })
+            </div>
+            <div class="form-group">
+                <label>Telephone:</label>
+                @Html.TextBoxFor(m => m.telephone, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.telephone), @value = @Model.telephone, @type = "telephone" })
+            </div>
+            <div class="form-group" id="editCourse">
+                <label>Topic (in Course): You can only add Topics already added to Course.</label>
+                <select class="form-control" id="topID" name="topID">
+                    @if (Model.topDB == null || Model.topDB.Count() == 0)
+                    {
+                        <option value="0" selected>No Topic</option>
+                    }
+                    else
+                    {
+                        if (Model.topID == 0)
+                        {
+                            <option value="0" selected>No Topic</option>
+                        }
+                        else
+                        {
+                            <option value="0">No Topic</option>
+
+                        }
+
+                        foreach (var x in Model.topDB)
+                        {
+                            if (x.topID == Model.topID) //Neu da tham gia khoa hoc roi
+                            {
+                                <option value="@x.topID" selected>@x.name</option>
+                            }
+                            else
+                            {
+                                <option value="@x.topID">@x.name</option>
+                            }
+
+                        }
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary float-right" value="Update" />
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("Add Topic to Course", "AddTo", "Course", null, new { @class = "btn btn-secondary float-left mr-3" })
+            </div>
+        </fieldset>
+            }
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,45 @@
+﻿@model List<TestSession.Models.TrainerView>
+@{
+    ViewBag.Title = "My Course";
+}
+<div class="jumbotron">
+    <h1>My Course & Topic</h1>
+</div>
+<div class="container">
+    <div class="row">
+        @if (Model != null)
+        {
+            <table class="table table-hover" id="tableResult">
+                <thead>
+                    <tr>
+                        <th scope="col">Topic Name</th>
+                        <th scope="col">Topic Details</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Course Details</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model)
+                    {
+
+                    <tr>
+                        <th scope="row">@x.topic_name</th>
+                        <td>@x.topic_details</td>
+                        <td>@x.course_name</td>
+                        <td>@x.course_details</td>
+                    </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+    <div class="alert alert-warning mt-3 p-2" id="warnMsg" role="alert">
+        You have not received any Topic. Please contact Training Staff for more details.
+    </div>
+
+        }
+    </div>
+</div>

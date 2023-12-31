@@ -1,0 +1,52 @@
+﻿@model TestSession.Models.NewAccount
+@{
+    ViewBag.Title = "New Account";
+}
+<div class="jumbotron">
+    <h1>New Account</h1>
+</div>
+<div class="container">
+    @if (ViewBag.Status != null)
+    {
+        <div class="alert alert-warning mt-3" role="alert">
+
+            @ViewBag.Status
+        </div>
+    }
+    <div>
+        @using (Html.BeginForm("NewAccount", "Account", FormMethod.Post, new { @class = "border border-primary mt-3 p-3" }))
+        {
+            <div class="form-group">
+                <label>Username:</label>
+                @Html.TextBoxFor(m => m.username, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.username) })
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                @Html.TextBoxFor(m => m.password, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.password), @type = "password" })
+            </div>
+            <div class="form-group">
+                <label>Re-password:</label>
+                @Html.TextBoxFor(m => m.repassword, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.repassword), @type = "password" })
+            </div>
+            <div class="form-group">
+                <label for="type_acc">Type users</label>
+                <select class="form-control" id="type_acc" name="type_acc">
+                    <option value="0">Trainer</option>
+                    <option value="1">Training Staff</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Full name:</label>
+                @Html.TextBoxFor(m => m.fullname, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.fullname) })
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                @Html.TextBoxFor(m => m.email, new { @class = "form-control", @placeholder = Html.DisplayNameFor(n => n.email), @type = "email" })
+            </div>
+            <input type="submit" class="btn btn-primary mt-3" value="Register" />
+        }
+
+    </div>
+
+
+</div>
